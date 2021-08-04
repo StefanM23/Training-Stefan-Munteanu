@@ -3,4 +3,5 @@
     define("userName","dummyName");
     define("password","dummyPassword");
     define("dataBase","dummyDB");
-  
+    
+    define("managerEmail","dummyEmail");

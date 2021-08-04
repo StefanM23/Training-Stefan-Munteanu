@@ -1,7 +1,7 @@
 <?php
     session_start();
     require_once('common.php');
-   
+    
     if(isset($_GET['id']) & !empty($_GET['id'])){
         $item=$_GET['id'];
         $_SESSION['cart'][$item]=$item;
