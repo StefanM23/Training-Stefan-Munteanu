@@ -56,3 +56,18 @@ form a,form button{
     position: relative;
     left: 190px;
 }
+.main-login-page{
+    width: 100%;
+}
+.myLoginPage {
+    width: 15%;
+    height: 100%;
+    margin: 10% auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.myLoginPage input{
+    padding: 10px;
+    margin: 0px;
+}
