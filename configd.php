@@ -1,11 +1,12 @@
 <?php
 
-define("LOCALHOST","dummyHost");
-define("USERNAME","dummyName");
-define("PASSWORD","dummyPassword");
-define("DATABASE","dummyDB");
+define('LOCALHOST', 'dummyHost');
+define('USERNAME', 'dummyName');
 
-define("MANAGER_EMAIL","dummyEmail");
+define('PASSWORD', 'dummyPassword');
+define('DATABASE', 'dummyDB');
 
-define("LOGIN_USERNAME","dummyUsername");
-define("LOGIN_PASSWORD","dummyPassword");
+define('MANAGER_EMAIL', 'dummyEmail');
+
+define('LOGIN_USERNAME', 'dummyUsername');
+define('LOGIN_PASSWORD', 'dummyPassword');

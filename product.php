@@ -1,3 +1,13 @@
+<?php
+
+require_once "common.php";
+require_once "config.php";
+
+if (isset($_POST['Save'])) {
+    
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,14 +18,14 @@
     <link rel="stylesheet" href="product.css">
 </head>
 <body>
-    <form action="" method="post" enctype="multipart/form-data" class="myProductFrom">
-        <input type="text" name="title" placeholder="Title"><br>
-        <input type="text" name="description" placeholder="Description"><br>
-        <input type="text" name="price" placeholder="Price"><br>
-        <input type="text" name="image" placeholder="Image">
-        <input type="file" ><br>
-        <a href="#">Products</a>
-        <input type="submit" value="Save">
+    <form action="product.php" method="post" enctype="multipart/form-data" class="myProductFrom">
+        <input class="item-i" type="text" name="title" placeholder="Title"><br>
+        <input class="item-i" type="text" name="description" placeholder="Description"><br>
+        <input class="item-i" type="text" name="price" placeholder="Price"><br>
+        <input class="item-j" type="text" name="image" placeholder="Image">
+        <input class="item-j-x" type="file" ><br>
+        <a class="item-j-y" href="#">Products</a>
+        <input class="item-j-y" type="submit" value="Save">
     </form>
 </body>
 </html>

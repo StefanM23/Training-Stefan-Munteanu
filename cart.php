@@ -4,13 +4,14 @@ require_once "common.php";
 require_once "config.php";
 
 //prepare string HTML with products for email
-function loadHTML($image,$title,$description,$price){
+function loadHTML($image, $title, $description, $price) 
+{
     $message="<html>
                 <head>
                     <title>Order</title>
                 </head>
                 <body>";
-    for($i=0;$i<count($title);++$i){
+    for ($i=0; $i<count($title); ++$i) {
         $message.="<br><b>Product $i :</b><br>
                         <img src='{$image[$i]}' alt='poza'><br>
                         <b>Product description:</b>
@@ -24,15 +25,15 @@ function loadHTML($image,$title,$description,$price){
     return  $message;            
 }
 //when remove items
-if(isset($_POST['id'])){
+if (isset($_POST['id'])) {
     $item=$_POST['id'];
     unset($_SESSION['cart'][$item]);    
 }
 //prepare sql statement for query and fetch data for the cart
-if(!empty($_SESSION['cart'])){
+if (!empty($_SESSION['cart'])) {
     $sql="SELECT * FROM products WHERE id IN (";
 
-    for($i=0;$i<count($_SESSION['cart']);++$i){
+    for ($i=0; $i<count($_SESSION['cart']); ++$i) {
         $sql.="?,";
     }
     $sql=substr($sql ,0,-1);
@@ -40,12 +41,12 @@ if(!empty($_SESSION['cart'])){
     
     $result=$connection->prepare($sql);
     $parameters=[];
-    foreach($_SESSION['cart'] as $element){
+    foreach ($_SESSION['cart'] as $element) {
         array_push($parameters,$element);
     }
     $result->execute($parameters);
         
-}else{
+} else {
     $sql="SELECT * FROM products WHERE id=-1;";
     $result=$connection->query($sql);
 }
@@ -57,14 +58,14 @@ $descriptionCart=[];
 $priceCart=[];
 $idCart=[];
 
-while(($row=$result->fetch(PDO::FETCH_ASSOC))!==false){
+while (($row=$result->fetch(PDO::FETCH_ASSOC))!==false) {
     array_push($imageCart,$row['image']);
     array_push($titleCart,$row['title']);
     array_push($descriptionCart,$row['description']);
     array_push($priceCart,$row['price']);
     array_push($idCart,$row['id']);
 }
-if(isset($_POST['checkout'])){
+if (isset($_POST['checkout'])) {
 
     $nameClient=$_POST['name'];
     $nameClient=strip_tags($nameClient);
@@ -73,7 +74,7 @@ if(isset($_POST['checkout'])){
     $commentClient=$_POST['comments'];
     $commentClient=strip_tags($commentClient);
 
-    if(!empty($nameClient)&&!empty($addressClient)){
+    if (!empty($nameClient) &&! empty($addressClient)) {
 
         $header="From: <demo@stefan.me>\r\n";
         $header.="MIME-VERSION: 1.0\r\n";
@@ -85,12 +86,12 @@ if(isset($_POST['checkout'])){
         $message.= $addressClient." and the command is :";
         $message.=loadHTML($imageCart,$titleCart,$descriptionCart,$priceCart);
 
-        if(!empty($commentClient)){
+        if (!empty($commentClient)) {
             $message.=" <b>Comments:</b>\n".$commentClient;
         }
         mail(MANAGER_EMAIL,$subject,$message,$header);
             
-    }else{
+    } else {
         echo "<script>alert('You must enter your name and contacts!')</script>";
     }
 }
@@ -107,7 +108,7 @@ if(isset($_POST['checkout'])){
 <body>
     <div class="main-section">
         <form action="cart.php" method="post">
-            <?php for($i=0;$i<count($titleCart);++$i): ?>
+            <?php for ($i=0; $i<count($titleCart); ++$i) : ?>
                 <div class="full-section">
                     <div class="info-section">
                         <img src="<?=$imageCart[$i]; ?>" alt="<?=translateLabels("image");?>">

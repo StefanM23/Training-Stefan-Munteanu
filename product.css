@@ -1,4 +1,23 @@
+
 .myProductFrom{
-    border: 1px solid black;
-    width: 400px;
+    width: 500px;
+    padding: 100px;
+    margin: 0 auto;
+}
+.item-i{
+    width: 100%;
+    padding: 10px;
+    margin: 10px;
+}
+.item-j{
+    width: 39%;
+    padding: 10px;
+    margin: 10px;
+}
+.item-j-y{
+    position: relative;
+    width: 39%;
+    padding: 10px;
+    margin: 10px;
+    left:200px;
 }

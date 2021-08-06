@@ -2,18 +2,18 @@
 
 require_once "common.php";
 require_once "config.php";
-if(isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
 
     $username=(isset($_POST['username'])) ? $_POST['username'] : "STOP";
     $password=(isset($_POST['password'])) ? $_POST['password'] : "STOP";
     
-    if($username==LOGIN_USERNAME && $password==LOGIN_PASSWORD){
+    if ($username==LOGIN_USERNAME && $password==LOGIN_PASSWORD) {
         $_SESSION['username']=$username;
         $_SESSION['password']=$password;
         header("Location: http://localhost/ProjectMS/products.php");
         exit; 
-    }else{ 
-        if(!empty($username)&&!empty($password)){
+    } else { 
+        if (!empty($username) && !empty($password)) {
             echo "<script>alert('The data entered is incorrect.');</script>";
         }
     }  

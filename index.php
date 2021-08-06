@@ -2,15 +2,14 @@
 
 require_once "common.php";
 
-if(isset($_POST['id'])){
+if (isset($_POST['id'])) {
     $item=$_POST['id'];
     $_SESSION['cart'][$item]=$item;
 }
 
-if(!empty($_SESSION['cart'])){
+if (!empty($_SESSION['cart'])) {
     $sql="SELECT * FROM products WHERE id NOT IN (";
-
-    for($i=0;$i<count($_SESSION['cart']);++$i){
+    for ($i=0; $i<count($_SESSION['cart']); ++$i) {
         $sql.="?,";
     }
     $sql=substr($sql ,0,-1);
@@ -18,12 +17,12 @@ if(!empty($_SESSION['cart'])){
 
     $result=$connection->prepare($sql);
     $parameters=[];
-    foreach($_SESSION['cart'] as $element){
+    foreach ($_SESSION['cart'] as $element){
         array_push($parameters,$element);
     }
     $result->execute($parameters);
     
-}else{
+} else {
     $sql="SELECT * FROM products;";
     $result=$connection->query($sql);
 }
@@ -35,7 +34,7 @@ $priceIndex=[];
 $idIndex=[];
 
 
-while(($row=$result->fetch(PDO::FETCH_ASSOC))!==false){
+while (($row=$result->fetch(PDO::FETCH_ASSOC))!==false) {
     array_push($imageIndex,$row['image']);
     array_push($titleIndex,$row['title']);
     array_push($descriptionIndex,$row['description']);
@@ -55,7 +54,7 @@ while(($row=$result->fetch(PDO::FETCH_ASSOC))!==false){
 <body>
     <div class="main-section">
         <form action="index.php" method="post">
-            <?php for($i=0;$i<count($titleIndex);++$i): ?>
+            <?php for ($i=0; $i<count($titleIndex); ++$i) : ?>
                     <div class="full-section">
                         <div class="info-section">
                             <img src="<?=$imageIndex[$i];?>" alt="<?=translateLabels("image");?>">
