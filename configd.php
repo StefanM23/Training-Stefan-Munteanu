@@ -1,10 +1,11 @@
 <?php
-    define('localHost',"dummyHost");
-    define("userName","dummyName");
-    define("password","dummyPassword");
-    define("dataBase","dummyDB");
-    
-    define("managerEmail","dummyEmail");
 
-    define("usernameInfo","dummyUsername");
-    define("passwordInfo","dummyPassword");
+define("LOCALHOST","dummyHost");
+define("USERNAME","dummyName");
+define("PASSWORD","dummyPassword");
+define("DATABASE","dummyDB");
+
+define("MANAGER_EMAIL","dummyEmail");
+
+define("LOGIN_USERNAME","dummyUsername");
+define("LOGIN_PASSWORD","dummyPassword");

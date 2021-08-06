@@ -1,23 +1,47 @@
 <?php
-    session_start();
-    require_once('common.php');
-    
-    if(isset($_GET['id']) & !empty($_GET['id'])){
-        $item=$_GET['id'];
-        $_SESSION['cart'][$item]=$item;
-    }
 
-    if(!empty($_SESSION['cart'])){
-        $sql="SELECT * FROM products WHERE id NOT IN (";
-        foreach($_SESSION['cart'] as $element){
-            $sql.=$_SESSION['cart'][$element].",";
-        }
-        $sql=substr($sql ,0,-1);
-        $sql.=");";  
-    }else{
-        $sql="SELECT * FROM products;";
+require_once "common.php";
+
+if(isset($_POST['id'])){
+    $item=$_POST['id'];
+    $_SESSION['cart'][$item]=$item;
+}
+
+if(!empty($_SESSION['cart'])){
+    $sql="SELECT * FROM products WHERE id NOT IN (";
+
+    for($i=0;$i<count($_SESSION['cart']);++$i){
+        $sql.="?,";
     }
+    $sql=substr($sql ,0,-1);
+    $sql.=");";
+
+    $result=$connection->prepare($sql);
+    $parameters=[];
+    foreach($_SESSION['cart'] as $element){
+        array_push($parameters,$element);
+    }
+    $result->execute($parameters);
+    
+}else{
+    $sql="SELECT * FROM products;";
     $result=$connection->query($sql);
+}
+
+$imageIndex=[];
+$titleIndex=[];
+$descriptionIndex=[];
+$priceIndex=[];
+$idIndex=[];
+
+
+while(($row=$result->fetch(PDO::FETCH_ASSOC))!==false){
+    array_push($imageIndex,$row['image']);
+    array_push($titleIndex,$row['title']);
+    array_push($descriptionIndex,$row['description']);
+    array_push($priceIndex,$row['price']);
+    array_push($idIndex,$row['id']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,30 +49,32 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index Page</title>
+    <title><?=translateLabels("Index Page");?></title>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <div class="main-section">
-        <?php while(($row=$result->fetch(PDO::FETCH_ASSOC))!==false): ?>
-            <div class="full-section" id="<?php echo $row['id']; ?>">
-                <div class="info-section">
-                     <img src="<?php echo $row['image']; ?>" alt="poza">
-                 </div>
-                <div class="info-section">
-                    <ul>
-                        <li id="<?php echo $row['id']; ?>"><?php echo $row['title']; ?></li>
-                         <li id="<?php echo $row['id']; ?>"><?php echo $row['description']; ?></li>
-                         <li id="<?php echo $row['id']; ?>"><?php echo $row['price']; ?></li>
-                    </ul>
-                </div>
-                <div class="info-section">
-                     <a href="index.php?id=<?php echo $row['id']; ?>">Add</a>
-                </div>
-            </div>
-        <?php endwhile; ?>
+        <form action="index.php" method="post">
+            <?php for($i=0;$i<count($titleIndex);++$i): ?>
+                    <div class="full-section">
+                        <div class="info-section">
+                            <img src="<?=$imageIndex[$i];?>" alt="<?=translateLabels("image");?>">
+                        </div>
+                        <div class="info-section">
+                            <ul>
+                                <li><?=$titleIndex[$i]; ?></li>
+                                <li><?=$descriptionIndex[$i]; ?></li>
+                                <li><?=$priceIndex[$i]; ?></li>
+                            </ul>
+                        </div>
+                        <div class="info-section">
+                            <button name="id" value="<?=$idIndex[$i]; ?>"><?=translateLabels("Add");?></button>
+                        </div>
+                    </div>
+            <?php endfor; ?>
+        </form>
         <div class="cart-section">
-            <a href="cart.php">Go to cart</a>
+            <a href="cart.php"><?=translateLabels("Go to cart");?></a>
         </div>
     </div>
 </body>
