@@ -32,7 +32,7 @@ $res = $result->fetchAll();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?=translateLabels("Index Page");?></title>
+    <title><?= translateLabels("Index Page"); ?></title>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
@@ -41,23 +41,23 @@ $res = $result->fetchAll();
             <?php for ($i = 0; $i < count($res); ++$i): ?>
                     <div class="full-section">
                         <div class="info-section">
-                            <img src="<?=$res[$i]['image'];?>" alt="<?=translateLabels('image');?>">
+                            <img src="<?= $res[$i]['image']; ?>" alt="<?= translateLabels('image'); ?>">
                         </div>
                         <div class="info-section">
                             <ul>
-                                <li><?=$res[$i]['title'];?></li>
-                                <li><?=$res[$i]['description'];?></li>
-                                <li><?=$res[$i]['price'];?></li>
+                                <li><?= $res[$i]['title']; ?></li>
+                                <li><?= $res[$i]['description']; ?></li>
+                                <li><?= $res[$i]['price']; ?></li>
                             </ul>
                         </div>
                         <div class="info-section">
-                            <button type="submit" name="id" value="<?=$res[$i]['id'];?>"><?=translateLabels('Add');?></button>
+                            <button type="submit" name="id" value="<?= $res[$i]['id']; ?>"><?= translateLabels('Add'); ?></button>
                         </div>
                     </div>
             <?php endfor;?>
         </form>
         <div class="cart-section">
-            <a href="cart.php"><?=translateLabels('Go to cart');?></a>
+            <a href="cart.php"><?= translateLabels('Go to cart'); ?></a>
         </div>
     </div>
 </body>

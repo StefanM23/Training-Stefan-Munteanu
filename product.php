@@ -1,10 +1,10 @@
 <?php
 
-require_once "common.php";
-require_once "config.php";
+require_once 'common.php';
+require_once 'config.php';
 
 if (isset($_POST['Save'])) {
-    
+
 }
 
 ?>

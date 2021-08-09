@@ -18,6 +18,9 @@ if(isset($_POST['id'])){
     $result=$connection->prepare($sqlDelete);
     $result->execute([$_POST['id']]);
 }
+
+if(isset($_POST))
+
 $sql="SELECT * FROM products;";
 $result=$connection->query($sql);
 
@@ -60,10 +63,10 @@ while(($row=$result->fetch(PDO::FETCH_ASSOC))!==false){
                         </ul>
                     </div>
                     <div class="info-section">
-                        <a href="products.php?id="><?=translateLabels("Edit");?></a>
+                        <button type="submit" name="edit" value="<?=$idProducts[$i]; ?>"><?=translateLabels("Edit");?></button>
                     </div>
                     <div class="info-section">
-                        <button name="id" value="<?=$idProducts[$i]; ?>"><?=translateLabels("Delete");?></button>
+                        <button type="submit" name="id" value="<?=$idProducts[$i]; ?>"><?=translateLabels("Delete");?></button>
                     </div>
                 </div> 
             <?php endfor; ?>
