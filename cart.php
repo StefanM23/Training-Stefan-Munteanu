@@ -1,29 +1,6 @@
 <?php
 
 require_once 'common.php';
-require_once 'config.php';
-
-//prepare string HTML with products for email
-function loadHTML($result)
-{
-    $message = '<html>
-                <head>
-                    <title>Order</title>
-                </head>
-                <body>';
-    foreach ($result as $product) {
-        $message .= '<br><b>Product ' . $product['title'] . ' :</b><br>
-                        <img src="' . $product['image'] . '" alt="image"><br>
-                        <b>Product description:</b>
-                        <ol>
-                            <li>' . $product['title'] . '</li>
-                            <li>' . $product['description'] . '</li>
-                            <li>' . $product['price'] . '</li>
-                        </ol>';
-    }
-    $message .= '</body></html>';
-    return $message;
-}
 
 //when remove items
 if (isset($_POST['id'])) {
@@ -58,25 +35,37 @@ if (isset($_POST['checkout'])) {
 
     if (!empty($nameClient) && !empty($addressClient)) {
 
+        $templateMail='model.php';
+
         $header = "From: <demo@stefan.me> \r\n";
         $header .= "MIME-VERSION: 1.0\r\n";
         $header .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
-        $subject = 'Order for ' . $nameClient;
+        $subject = 'Order for ';
+        
+        $output='The command for:'. $nameClient.' !';
 
-        $message = ' The order will be delivered to  ';
-        $message .= $addressClient . ' and the command is :';
-
-        $message .= loadHTML($res);
-
+        ob_start();
+        include 'model.php';
+        $output .= ob_get_clean();
+       
+   
         if (!empty($commentClient)) {
             $message .= "<b>Comments:</b>\n" . $commentClient;
         }
-        mail(MANAGER_EMAIL, $subject, $message, $header);
-        header('Location: cart.php');
-        exit;
-    } else {
-        echo '<script>alert("You must enter your name and contacts!")</script>';
+     
+        mail(MANAGER_EMAIL, $subject, $output, $header);
+        
+        $detailContact = 'Nume:' . $nameClient . ' Adress:' . $addressClient;
+        $date = date('j/m/y|h:i:s');
+        $arrId = array_column($res, 'id');
+
+        $sql = 'INSERT INTO `orders`(`creation_date`, `customer_details`,`purchased_products`) VALUES (?,?,?)';
+
+        $result = $connection->prepare($sql);
+        foreach ($arrId as $x) {
+            $result->execute(array($date, $detailContact, $x));
+        }
     }
 }
 ?>

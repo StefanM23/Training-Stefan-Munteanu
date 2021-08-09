@@ -11,3 +11,11 @@ INSERT INTO `products`(`title`, `description`, `price`, `image`) VALUES ("Flower
 INSERT INTO `products`(`title`, `description`, `price`, `image`) VALUES ("Flower 2","Red","132.12","https://cdn.toxel.ro/img/contents/flowers_56.jpg");
 INSERT INTO `products`(`title`, `description`, `price`, `image`) VALUES ("Flower 3","Purple","102.22","https://cdn.toxel.ro/img/contents/flowers_56.jpg");
       
+CREATE TABLE IF NOT EXISTS orders(
+    creation_date varchar(100),
+    customer_details varchar(100),
+    purchased_products int(100) PRIMARY KEY,
+    FOREIGN KEY (purchased_products)
+      REFERENCES products (id)
+      ON DELETE CASCADE
+);
