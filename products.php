@@ -30,6 +30,8 @@ $descriptionProducts=[];
 $priceProducts=[];
 $idProducts=[];
 
+if(isset($_POST['edit']))
+
 while(($row=$result->fetch(PDO::FETCH_ASSOC))!==false){
     array_push($imageProducts,$row['image']);
     array_push($titleProducts,$row['title']);

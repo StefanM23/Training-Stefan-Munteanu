@@ -5,21 +5,19 @@ require_once 'common.php';
 if (isset($_POST['id'])) {
     $item = $_POST['id'];
     $_SESSION['cart'][$item] = $item;
-    header("Location: index.php");
+    header('Location: index.php');
+    exit;
 }
 
 if (!empty($_SESSION['cart'])) {
-    $str_insert = implode(',', array_fill(0, count($_SESSION['cart']), '?'));
-    $sql = 'SELECT * FROM products WHERE id NOT IN (' . $str_insert . ');';
+    $strInsert = implode(',', array_fill(0, count($_SESSION['cart']), '?'));
+    $sql = 'SELECT * FROM products WHERE id NOT IN (' . $strInsert . ');';
 
     $result = $connection->prepare($sql);
 
-    $arr = $_SESSION['cart'];
-    sort($arr);
-    $result->execute($arr);
-
+    $result->execute(array_values($_SESSION['cart']));
 } else {
-    $sql = "SELECT * FROM products;";
+    $sql = 'SELECT * FROM products;';
     $result = $connection->query($sql);
 }
 
@@ -32,29 +30,29 @@ $res = $result->fetchAll();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= translateLabels("Index Page"); ?></title>
+    <title><?= translateLabels('Index Page'); ?></title>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <div class="main-section">
         <form action="index.php" method="post">
-            <?php for ($i = 0; $i < count($res); ++$i): ?>
+            <?php foreach ($res as $product): ?>
                     <div class="full-section">
                         <div class="info-section">
-                            <img src="<?= $res[$i]['image']; ?>" alt="<?= translateLabels('image'); ?>">
+                            <img src="<?= $product['image']; ?>" alt="<?= translateLabels('image'); ?>">
                         </div>
                         <div class="info-section">
                             <ul>
-                                <li><?= $res[$i]['title']; ?></li>
-                                <li><?= $res[$i]['description']; ?></li>
-                                <li><?= $res[$i]['price']; ?></li>
+                                <li><?= $product['title']; ?></li>
+                                <li><?= $product['description']; ?></li>
+                                <li><?= $product['price']; ?></li>
                             </ul>
                         </div>
                         <div class="info-section">
-                            <button type="submit" name="id" value="<?= $res[$i]['id']; ?>"><?= translateLabels('Add'); ?></button>
+                            <button type="submit" name="id" value="<?= $product['id']; ?>"><?= translateLabels('Add'); ?></button>
                         </div>
                     </div>
-            <?php endfor;?>
+            <?php endforeach; ?>
         </form>
         <div class="cart-section">
             <a href="cart.php"><?= translateLabels('Go to cart'); ?></a>
