@@ -105,7 +105,7 @@ if (isset($_POST['checkout'])) {
                         </ul>
                     </div>
                     <div class="info-section">
-                        <button name="id" value="<?= $product['id']; ?>"><?= translateLabels('Remove'); ?></button>
+                        <button type="submit" name="id" value="<?= $product['id']; ?>"><?= translateLabels('Remove'); ?></button>
                     </div>
                 </div>
             <?php endforeach; ?>
