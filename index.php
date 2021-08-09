@@ -1,46 +1,30 @@
 <?php
 
-require_once "common.php";
+require_once 'common.php';
 
 if (isset($_POST['id'])) {
-    $item=$_POST['id'];
-    $_SESSION['cart'][$item]=$item;
+    $item = $_POST['id'];
+    $_SESSION['cart'][$item] = $item;
+    header("Location: index.php");
 }
 
 if (!empty($_SESSION['cart'])) {
-    $sql="SELECT * FROM products WHERE id NOT IN (";
-    for ($i=0; $i<count($_SESSION['cart']); ++$i) {
-        $sql.="?,";
-    }
-    $sql=substr($sql ,0,-1);
-    $sql.=");";
+    $str_insert = implode(',', array_fill(0, count($_SESSION['cart']), '?'));
+    $sql = 'SELECT * FROM products WHERE id NOT IN (' . $str_insert . ');';
 
-    $result=$connection->prepare($sql);
-    $parameters=[];
-    foreach ($_SESSION['cart'] as $element){
-        array_push($parameters,$element);
-    }
-    $result->execute($parameters);
-    
+    $result = $connection->prepare($sql);
+
+    $arr = $_SESSION['cart'];
+    sort($arr);
+    $result->execute($arr);
+
 } else {
-    $sql="SELECT * FROM products;";
-    $result=$connection->query($sql);
+    $sql = "SELECT * FROM products;";
+    $result = $connection->query($sql);
 }
 
-$imageIndex=[];
-$titleIndex=[];
-$descriptionIndex=[];
-$priceIndex=[];
-$idIndex=[];
+$res = $result->fetchAll();
 
-
-while (($row=$result->fetch(PDO::FETCH_ASSOC))!==false) {
-    array_push($imageIndex,$row['image']);
-    array_push($titleIndex,$row['title']);
-    array_push($descriptionIndex,$row['description']);
-    array_push($priceIndex,$row['price']);
-    array_push($idIndex,$row['id']);
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,26 +38,26 @@ while (($row=$result->fetch(PDO::FETCH_ASSOC))!==false) {
 <body>
     <div class="main-section">
         <form action="index.php" method="post">
-            <?php for ($i=0; $i<count($titleIndex); ++$i) : ?>
+            <?php for ($i = 0; $i < count($res); ++$i): ?>
                     <div class="full-section">
                         <div class="info-section">
-                            <img src="<?=$imageIndex[$i];?>" alt="<?=translateLabels("image");?>">
+                            <img src="<?=$res[$i]['image'];?>" alt="<?=translateLabels('image');?>">
                         </div>
                         <div class="info-section">
                             <ul>
-                                <li><?=$titleIndex[$i]; ?></li>
-                                <li><?=$descriptionIndex[$i]; ?></li>
-                                <li><?=$priceIndex[$i]; ?></li>
+                                <li><?=$res[$i]['title'];?></li>
+                                <li><?=$res[$i]['description'];?></li>
+                                <li><?=$res[$i]['price'];?></li>
                             </ul>
                         </div>
                         <div class="info-section">
-                            <button name="id" value="<?=$idIndex[$i]; ?>"><?=translateLabels("Add");?></button>
+                            <button type="submit" name="id" value="<?=$res[$i]['id'];?>"><?=translateLabels('Add');?></button>
                         </div>
                     </div>
-            <?php endfor; ?>
+            <?php endfor;?>
         </form>
         <div class="cart-section">
-            <a href="cart.php"><?=translateLabels("Go to cart");?></a>
+            <a href="cart.php"><?=translateLabels('Go to cart');?></a>
         </div>
     </div>
 </body>

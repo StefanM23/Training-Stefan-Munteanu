@@ -24,11 +24,13 @@ function loadHTML($image, $title, $description, $price)
     $message.="</body></html>";
     return  $message;            
 }
+
 //when remove items
 if (isset($_POST['id'])) {
-    $item=$_POST['id'];
-    unset($_SESSION['cart'][$item]);    
+    $item = $_POST['id'];
+    unset($_SESSION['cart'][$item]);
 }
+
 //prepare sql statement for query and fetch data for the cart
 if (!empty($_SESSION['cart'])) {
     $sql="SELECT * FROM products WHERE id IN (";
