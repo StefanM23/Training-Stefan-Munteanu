@@ -24,11 +24,11 @@ CREATE TABLE orders(
     customer_name VARCHAR(100),
     adress VARCHAR(100),
     comment VARCHAR(200),
-    creation_date varchar(100)
+    creation_date varchar(100),
 );
 CREATE TABLE orderItem(
     order_id INT,
     id INT,
-    FOREIGN KEY (id) REFERENCES products(id),
+    FOREIGN KEY (id) REFERENCES products(id) ON DELETE SET NULL,
     FOREIGN KEY (order_id) REFERENCES orders(order_id)
 );
