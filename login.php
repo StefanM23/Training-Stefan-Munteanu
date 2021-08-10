@@ -34,7 +34,7 @@ if (isset($_POST['submit'])) {
         <form action="login.php" method="post" class="myLoginPage">
             <input type="text" name="username" placeholder="<?= translateLabels('Username'); ?>" value="<?= isset($_POST['username']) ? $_POST['username'] : ''; ?>" ><br>
             <input type="password" name="password" placeholder="<?= translateLabels('Password'); ?>" value="<?= isset($_POST['password']) ? $_POST['password'] : ''; ?>"><br>
-            <input type="submit" name="submit" value="<?= translateLabels('Login'); ?>">
+            <button type="submit" name="submit"><?= translateLabels('Login'); ?></button>
         </form>
     </div>
 </body>
