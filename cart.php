@@ -34,48 +34,41 @@ if (isset($_POST['checkout'])) {
     $commentClient = strip_tags($commentClient);
 
     if (!empty($nameClient) && !empty($addressClient)) {
+        $templateMail = 'model.php';
 
-        $templateMail='model.php';
-
-        $header = "From: <demo@stefan.me> \r\n";
+        $header = "From: <demo@stefan.me>\r\n";
         $header .= "MIME-VERSION: 1.0\r\n";
         $header .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
         $subject = 'Order for ';
-        
-        $output='The command for:'. $nameClient.' !';
+        $output = 'The command for:' . $nameClient . ' !';
 
         ob_start();
         include 'model.php';
         $output .= ob_get_clean();
-       
-   
+
         if (!empty($commentClient)) {
             $output .= "<b>Comments:</b>\n" . $commentClient;
         }
-     
+
         mail(MANAGER_EMAIL, $subject, $output, $header);
-        
-       
-        $date = date('j/m/y|h:i:s');
+
+        $objDateTime = new DateTime();
+        $dateISO = $objDateTime->format('c');
         $arrProductsId = array_column($res, 'id');
 
-        $sqlCustomer = 'INSERT INTO `customers`(`customer_name`, `adress`, `comment`) VALUES (?,?,?)';
-        $resultCustomer = $connection->prepare($sqlCustomer);
-        $resultCustomer->execute(array($nameClient, $addressClient, $commentClient));
-        $lastCustomerId = (int) $connection->lastInsertId();
-
-        $sqlOrder = 'INSERT INTO `orders`(`customer_id`, `creation_date`) VALUES (?,?)';
+        $sqlOrder = 'INSERT INTO `orders`(`customer_name`, `adress`, `comment`, `creation_date`) VALUES (?, ?, ?, ?);';
         $resultOrder = $connection->prepare($sqlOrder);
-        $resultOrder->execute(array($lastCustomerId, $date));
-        $lastOrderId = (int) $connection->lastInsertId();
+        $resultOrder->execute([$nameClient, $addressClient, $commentClient, $dateISO]);
 
-        $sqlOrderItem = 'INSERT INTO `orderitem`(`order_id`, `id`) VALUES (?,?)';
+        $lastOrderId = (int) $connection->lastInsertId();
+        $sqlOrderItem = 'INSERT INTO `orderitem`(`order_id`, `id`) VALUES (?, ?);';
         $resultOrderItem = $connection->prepare($sqlOrderItem);
         foreach ($arrProductsId as $order) {
-            $resultOrderItem->execute(array($lastOrderId, $order));
+            $resultOrderItem->execute([$lastOrderId, $order]);
         }
-
+        header('Location: cart.php');
+        exit;
     }
 }
 ?>
@@ -111,8 +104,8 @@ if (isset($_POST['checkout'])) {
         </form>
         <form action="cart.php" method="post">
             <input type="text" name="name" placeholder="<?= translateLabels('Name'); ?>" value="<?= isset($_POST['name']) ? $_POST['name'] : ''; ?>"><br>
-            <textarea name="contacts" style="resize: none; id="" cols="30" rows="2" placeholder="<?= translateLabels('Contact details'); ?>" ><?= isset($_POST['contacts']) ? $_POST['contacts'] : ''; ?></textarea><br>
-            <textarea name="comments" style="resize: none; id="" cols="30" rows="4" placeholder="<?= translateLabels('Comments'); ?>"><?= isset($_POST['comments']) ? $_POST['comments'] : ''; ?></textarea><br>
+            <textarea name="contacts" style="resize: none;"  cols="30" rows="2" placeholder="<?= translateLabels('Contact details'); ?>" ><?= isset($_POST['contacts']) ? $_POST['contacts'] : ''; ?></textarea><br>
+            <textarea name="comments" style="resize: none;" cols="30" rows="4" placeholder="<?= translateLabels('Comments'); ?>"><?= isset($_POST['comments']) ? $_POST['comments'] : ''; ?></textarea><br>
             <a href="index.php"><?= translateLabels('Go to Index'); ?></a>
             <button type="submit" name="checkout"><?= translateLabels('Checkout'); ?></button>
         </form>
