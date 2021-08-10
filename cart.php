@@ -51,21 +51,31 @@ if (isset($_POST['checkout'])) {
        
    
         if (!empty($commentClient)) {
-            $message .= "<b>Comments:</b>\n" . $commentClient;
+            $output .= "<b>Comments:</b>\n" . $commentClient;
         }
      
         mail(MANAGER_EMAIL, $subject, $output, $header);
         
-        $detailContact = 'Nume:' . $nameClient . ' Adress:' . $addressClient;
+       
         $date = date('j/m/y|h:i:s');
-        $arrId = array_column($res, 'id');
+        $arrProductsId = array_column($res, 'id');
 
-        $sql = 'INSERT INTO `orders`(`creation_date`, `customer_details`,`purchased_products`) VALUES (?,?,?)';
+        $sqlCustomer = 'INSERT INTO `customers`(`customer_name`, `adress`, `comment`) VALUES (?,?,?)';
+        $resultCustomer = $connection->prepare($sqlCustomer);
+        $resultCustomer->execute(array($nameClient, $addressClient, $commentClient));
+        $lastCustomerId = (int) $connection->lastInsertId();
 
-        $result = $connection->prepare($sql);
-        foreach ($arrId as $x) {
-            $result->execute(array($date, $detailContact, $x));
+        $sqlOrder = 'INSERT INTO `orders`(`customer_id`, `creation_date`) VALUES (?,?)';
+        $resultOrder = $connection->prepare($sqlOrder);
+        $resultOrder->execute(array($lastCustomerId, $date));
+        $lastOrderId = (int) $connection->lastInsertId();
+
+        $sqlOrderItem = 'INSERT INTO `orderitem`(`order_id`, `id`) VALUES (?,?)';
+        $resultOrderItem = $connection->prepare($sqlOrderItem);
+        foreach ($arrProductsId as $order) {
+            $resultOrderItem->execute(array($lastOrderId, $order));
         }
+
     }
 }
 ?>

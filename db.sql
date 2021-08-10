@@ -19,3 +19,21 @@ CREATE TABLE IF NOT EXISTS orders(
       REFERENCES products (id)
       ON DELETE CASCADE
 );
+CREATE TABLE customers (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_name VARCHAR(100),
+    adress VARCHAR(100),
+    comment VARCHAR(200)
+);
+CREATE TABLE orders(
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT,
+    creation_date varchar(100),
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
+CREATE TABLE orderItem(
+    order_id INT,
+    id INT,
+    FOREIGN KEY (id) REFERENCES products(id),
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+);
