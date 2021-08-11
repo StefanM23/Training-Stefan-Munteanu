@@ -47,9 +47,9 @@ if (isset($_GET['id'])) {
                     </div>
                     <div class="info-section">
                         <ul>
-                            <li><?= translateLabels('Product');?>: <?=$previewInfo['title']; ?></li>
-                            <li><?= translateLabels('Description');?>: <?=$previewInfo['description']; ?></li>
-                            <li><?= translateLabels('Price');?>: <?=$previewInfo['price']; ?></li>
+                            <li><?= translateLabels('Product'); ?>: <?= $previewInfo['title']; ?></li>
+                            <li><?= translateLabels('Description'); ?>: <?= $previewInfo['description']; ?></li>
+                            <li><?= translateLabels('Price'); ?>: <?= $previewInfo['price']; ?></li>
                         </ul>
                     </div>
                 </div>
