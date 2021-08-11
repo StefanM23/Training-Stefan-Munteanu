@@ -28,11 +28,11 @@ if (isset($_POST['edit'])) {
     $resultEdit->execute([$_POST['edit']]);
     $fetchEdit = $resultEdit->fetchAll();
     
-    $_SESSION['titleMod'] =  $fetchEdit[0]['title'];
-    $_SESSION['descriptionMod'] =  $fetchEdit[0]['description'];
-    $_SESSION['priceMod'] =  $fetchEdit[0]['price'];
-    $_SESSION['imageMod'] =  $fetchEdit[0]['image'];
-    $_SESSION['idMod'] =  $fetchEdit[0]['id'];
+    $_SESSION['titleMod'] = $fetchEdit[0]['title'];
+    $_SESSION['descriptionMod'] = $fetchEdit[0]['description'];
+    $_SESSION['priceMod'] = $fetchEdit[0]['price'];
+    $_SESSION['imageMod'] = $fetchEdit[0]['image'];
+    $_SESSION['idMod'] = $fetchEdit[0]['id'];
     header('Location: product.php');
     exit;
 }
@@ -47,11 +47,9 @@ if (isset($_POST['add'])) {
     exit;
 }
 
-
 $sql = "SELECT * FROM products;";
 $result = $connection->query($sql);
 $res = $result->fetchAll();
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
