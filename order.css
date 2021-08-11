@@ -1,0 +1,36 @@
+body{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-size: 20px;
+    width: 100%;
+}
+.full-section{
+    display: grid;
+    grid-template-columns: 30% 60% auto;
+    width: 80%;
+    margin: 0 auto;
+}
+.section-i{
+    padding: 5px;
+    margin: 10px;
+}
+.section-i-info{
+    display: grid;
+    grid-template-columns: 40% auto;
+    width: 100%;
+}
+.info-section
+{
+    border:1px solid black;
+    margin-top: 5px;
+}
+.section-i-info .info-section img{
+    width: 100px;
+    height: 100px;
+    margin-top: 5px;
+    margin-left: 120px;
+}
+.info-section ul{
+    list-style-type: none;
+}
