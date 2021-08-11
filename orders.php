@@ -16,7 +16,7 @@ $res = $result->fetchAll();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?=translateLabels('Orders Page');?></title>
+    <title><?= translateLabels('Orders Page'); ?></title>
     <link rel="stylesheet" href="orders.css">
 </head>
 <body>
@@ -24,15 +24,15 @@ $res = $result->fetchAll();
         <?php foreach ($res as $orderInfo): ?>
             <li class="checkout-box">
                 <div class="checkout-i">
-                    <div><?=translateLabels('Date');?>: <?=$orderInfo['creation_date'];?></div>
-                    <div><?=translateLabels('Customer');?>: <?=$orderInfo['customer_name'];?></div>
-                    <div><?=translateLabels('Adress');?>: <?=$orderInfo['adress'];?></div>
-                    <div><?=translateLabels('Comments');?>: <?=$orderInfo['comment'];?></div>
-                    <div><?=translateLabels('Total order');?>: <?=$orderInfo['sum_order'];?></div>
+                    <div><?= translateLabels('Date'); ?>: <?= $orderInfo['creation_date']; ?></div>
+                    <div><?= translateLabels('Customer'); ?>: <?= $orderInfo['customer_name']; ?></div>
+                    <div><?= translateLabels('Adress'); ?>: <?= $orderInfo['adress']; ?></div>
+                    <div><?= translateLabels('Comments'); ?>: <?= $orderInfo['comment']; ?></div>
+                    <div><?= translateLabels('Total order'); ?>: <?= $orderInfo['sum_order']; ?></div>
                 </div>
-                <div class="checkout-j"><a href="order.php?id=<?=$orderInfo['order_id'];?>"><?=translateLabels('View');?></a></div>
+                <div class="checkout-j"><a href="order.php?id=<?= $orderInfo['order_id']; ?>"><?= translateLabels('View'); ?></a></div>
             </li>
-        <?php endforeach;?>
+        <?php endforeach; ?>
     </ul>
 </body>
 </html>

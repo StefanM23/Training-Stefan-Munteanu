@@ -19,22 +19,22 @@ if (isset($_GET['id'])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?=translateLabels('Preview order');?></title>
+    <title><?= translateLabels('Preview order'); ?></title>
     <link rel="stylesheet" href="order.css">
 </head>
 <body>
     <center>
-        <h1><?=translateLabels('Order');?> #<?=$res[0]['order_id'];?></h1>
+        <h1><?= translateLabels('Order'); ?> #<?= $res[0]['order_id']; ?></h1>
     </center>
     <div class="full-section">
         <div class="section-i">
             <ul>
                 <li class="checkout-box">
                     <div class="checkout-i">
-                        <div><?=translateLabels('Date');?>: <?=$res[0]['creation_date'];?></div>
-                        <div><?=translateLabels('Customer');?>: <?=$res[0]['customer_name'];?></div>
-                        <div><?=translateLabels('Adress');?>: <?=$res[0]['adress'];?></div>
-                        <div><?=translateLabels('Commnets');?>: <?=$res[0]['comment'];?></div>
+                        <div><?= translateLabels('Date'); ?>: <?= $res[0]['creation_date']; ?></div>
+                        <div><?= translateLabels('Customer'); ?>: <?= $res[0]['customer_name']; ?></div>
+                        <div><?= translateLabels('Adress'); ?>: <?= $res[0]['adress']; ?></div>
+                        <div><?= translateLabels('Commnets'); ?>: <?= $res[0]['comment']; ?></div>
                     </div>
                 </li>
             </ul>
@@ -43,19 +43,19 @@ if (isset($_GET['id'])) {
             <?php foreach ($res as $previewInfo): ?>
                 <div class="section-i-info">
                     <div class="info-section">
-                        <img src="<?=$previewInfo['image'];?>" alt="<?=translateLabels('image');?>">
+                        <img src="<?= $previewInfo['image']; ?>" alt="<?= translateLabels('image'); ?>">
                     </div>
                     <div class="info-section">
                         <ul>
-                            <li><?=translateLabels('Product');?>: <?=$previewInfo['title'];?></li>
-                            <li><?=translateLabels('Description');?>: <?=$previewInfo['description'];?></li>
-                            <li><?=translateLabels('Price');?>: <?=$previewInfo['price'];?></li>
+                            <li><?= translateLabels('Product');?>: <?=$previewInfo['title']; ?></li>
+                            <li><?= translateLabels('Description');?>: <?=$previewInfo['description']; ?></li>
+                            <li><?= translateLabels('Price');?>: <?=$previewInfo['price']; ?></li>
                         </ul>
                     </div>
                 </div>
-            <?php endforeach;?>
+            <?php endforeach; ?>
         </div>
-        <div class="section-i"><a href="orders.php"><?=translateLabels('Back');?></a></div>
+        <div class="section-i"><a href="orders.php"><?= translateLabels('Back'); ?></a></div>
     </div>
 </body>
 </html>
