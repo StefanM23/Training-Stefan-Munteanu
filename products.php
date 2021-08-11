@@ -3,7 +3,7 @@
 require_once 'common.php';
 
 //if logout is push
-if (isset($_GET['logout']) & !empty($_GET['logout'])) {
+if (isset($_POST['logout'])) {
     $_SESSION['username'] = null;
     $_SESSION['password'] = null;
 }
@@ -14,7 +14,7 @@ if (is_null($_SESSION['username']) && is_null($_SESSION['password'])) {
 }
 //when delete an element
 if (isset($_POST['id'])) {
-    $sqlDelete = 'DELETE FROM products WHERE id=?';
+    $sqlDelete = 'DELETE FROM products WHERE id = ?';
     $resultDelete = $connection->prepare($sqlDelete);
     $resultDelete->execute([$_POST['id']]);
     header('Location: products.php');
@@ -23,7 +23,7 @@ if (isset($_POST['id'])) {
 
 //when edit an element
 if (isset($_POST['edit'])) {
-    $sqlEdit = 'SELECT * FROM products WHERE id=?';
+    $sqlEdit = 'SELECT * FROM products WHERE id = ?';
     $resultEdit = $connection->prepare($sqlEdit);
     $resultEdit->execute([$_POST['edit']]);
     $fetchEdit = $resultEdit->fetchAll();
@@ -32,6 +32,17 @@ if (isset($_POST['edit'])) {
     $_SESSION['descriptionMod'] =  $fetchEdit[0]['description'];
     $_SESSION['priceMod'] =  $fetchEdit[0]['price'];
     $_SESSION['imageMod'] =  $fetchEdit[0]['image'];
+    $_SESSION['idMod'] =  $fetchEdit[0]['id'];
+    header('Location: product.php');
+    exit;
+}
+
+if (isset($_POST['add'])) {
+    unset($_SESSION['titleMod']);
+    unset($_SESSION['descriptionMod']);
+    unset($_SESSION['priceMod']);
+    unset($_SESSION['imageMod']);
+    unset($_SESSION['idMod']);
     header('Location: product.php');
     exit;
 }
@@ -75,12 +86,14 @@ $res = $result->fetchAll();
                 </div>
             <?php endforeach; ?>
         </form>
-        <div class="cart-section-products">
-            <a href="product.php"><?= translateLabels('Add'); ?></a>
-        </div>
-        <div class="cart-section-products">
-            <a href="products.php?logout=Logout"><?= translateLabels('Logout'); ?></a>
-        </div>
+        <form action="products.php" method="post">
+            <div class="cart-section-products">
+                <button type="submit" name="add"><?= translateLabels('Add'); ?></button>
+            </div>
+            <div class="cart-section-products">
+                <button type="submit" name="logout"><?= translateLabels('Logout'); ?></button>
+            </div>
+        </form>
     </div>
 </body>
 </html>

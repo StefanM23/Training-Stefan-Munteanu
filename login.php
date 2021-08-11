@@ -4,18 +4,10 @@ require_once 'common.php';
 
 if (isset($_POST['submit'])) {
 
-    if (isset($_POST['username']) && isset($_POST['password'])) {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-    }
-
-    if ($username == LOGIN_USERNAME && $password == LOGIN_PASSWORD) {
-        $_SESSION['username'] = $username;
-        $_SESSION['password'] = $password;
+    if ($_POST['username'] == LOGIN_USERNAME && $_POST['password'] == LOGIN_PASSWORD) {
+        $_SESSION['username'] = $_POST['username'];
+        $_SESSION['password'] = $_POST['password'];
         header('Location: products.php');
-        exit;
-    } else {
-        header('Location: login.php');
         exit;
     }
 }
