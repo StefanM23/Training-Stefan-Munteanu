@@ -92,6 +92,7 @@ $res = $result->fetchAll();
                 <button type="submit" name="logout"><?= translateLabels('Logout'); ?></button>
             </div>
         </form>
-    </div>
+    </div><br>
+    <a class="comments" href="comment.php">Comments</a>
 </body>
 </html>

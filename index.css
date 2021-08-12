@@ -6,7 +6,7 @@ body{
 }
 .full-section{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     width: 400px;
 }
 
@@ -26,7 +26,7 @@ body{
 }
 .info-section a{
     position: relative;
-    top: 25%;
+ 
     display: flex;
     justify-content: center;
     align-items: center;
