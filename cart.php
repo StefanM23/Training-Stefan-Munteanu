@@ -34,23 +34,20 @@ if (isset($_POST['checkout'])) {
     $commentClient = strip_tags($commentClient);
 
     if (!empty($nameClient) && !empty($addressClient)) {
-        $templateMail = 'model.php';
-
+        
         $header = "From: <demo@stefan.me>\r\n";
         $header .= "MIME-VERSION: 1.0\r\n";
         $header .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
-        $subject = 'Order for ';
-        $output = 'The command for:' . $nameClient . ' !';
+        $subject = 'Order for ' . $nameClient;
+        $output = 'The command for:' . $nameClient . ' ,' . ' and the address is: ' . $addressClient;
 
         ob_start();
         include 'model.php';
         $output .= ob_get_clean();
 
-        if (!empty($commentClient)) {
-            $output .= "<b>Comments:</b>\n" . $commentClient;
-        }
-
+        $output .= "<b>Comments:</b>\n" . $commentClient;
+       
         mail(MANAGER_EMAIL, $subject, $output, $header);
 
         $objDateTime = new DateTime();
@@ -103,9 +100,9 @@ if (isset($_POST['checkout'])) {
             <?php endforeach; ?>
         </form>
         <form action="cart.php" method="post">
-            <input type="text" name="name" placeholder="<?= translateLabels('Name'); ?>" value="<?= isset($_POST['name']) ? $_POST['name'] : ''; ?>"><br>
-            <textarea name="contacts" style="resize: none;"  cols="30" rows="2" placeholder="<?= translateLabels('Contact details'); ?>" ><?= isset($_POST['contacts']) ? $_POST['contacts'] : ''; ?></textarea><br>
-            <textarea name="comments" style="resize: none;" cols="30" rows="4" placeholder="<?= translateLabels('Comments'); ?>"><?= isset($_POST['comments']) ? $_POST['comments'] : ''; ?></textarea><br>
+            <input type="text" name="name" placeholder="<?= translateLabels('Name'); ?>" value="<?= isset($_POST['name']) ? $_POST['name'] : ''; ?>" require><br>
+            <textarea name="contacts" style="resize: none;"  cols="30" rows="2" placeholder="<?= translateLabels('Contact details'); ?>" require><?= isset($_POST['contacts']) ? $_POST['contacts'] : ''; ?></textarea><br>
+            <textarea name="comments" style="resize: none;" cols="30" rows="4" placeholder="<?= translateLabels('Comments'); ?>" ><?= isset($_POST['comments']) ? $_POST['comments'] : ''; ?></textarea><br>
             <a href="index.php"><?= translateLabels('Go to Index'); ?></a>
             <button type="submit" name="checkout"><?= translateLabels('Checkout'); ?></button>
         </form>

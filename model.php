@@ -7,15 +7,19 @@
     <title>Order</title>
 </head>
 <body>
-    <?php foreach ($res as $product): ?>
-        <br><b>Product <?= $product['title']; ?>:</b><br>
-        <img src="<?= $product['image']; ?>" alt="image"><br>
-        <b>Product description:</b>
-        <ol>
-            <li><?= $product['title']; ?></li>
-            <li><?= $product['description']; ?></li>
-            <li><?= $product['price']; ?></li>
-        </ol>
-    <?php endforeach; ?>
+    <table border="1px" width="230px" height="120px">
+        <?php foreach ($res as $product): ?>
+            <tr>
+                <td><img src="http://localhost/ProjectMS/<?= $product['image']; ?>" width="100%" height="100%" alt="image"></td>
+                <td>
+                    <ul style="list-style-type:none;margin-left:-30px;width:110px">
+                    <li><?= $product['title']; ?></li>
+                    <li><?= $product['description']; ?></li>
+                    </ul>
+                </td>
+                <td><?= $product['price']; ?></td>
+            </tr>
+       <?php endforeach; ?>
+    </table>
 </body>
 </html>
