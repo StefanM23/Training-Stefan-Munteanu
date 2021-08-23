@@ -13,11 +13,11 @@ try {
 
 function translateLabels($string)
 {
-    global $arr;
+    global $translations;
     $langCode = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
 
-    if (isset($arr[$langCode][$string])) {
-        $string = $arr[$langCode][$string];
+    if (isset($translations[$langCode][$string])) {
+        $string = $translations[$langCode][$string];
     }
 
     return $string;

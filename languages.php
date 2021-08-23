@@ -1,7 +1,7 @@
 <?php
 
-$arr = array(
-    'fr' => array(
+$translations = [
+    'fr' => [
         'Index Page' => 'Sommaire',
         'image' => 'image',
         'Go to cart' => 'Aller au panier',
@@ -40,5 +40,5 @@ $arr = array(
         'You can leave a comment about the product' => 'Vous pouvez laisser un commentaire sur le produit',
         'List of comments' => 'Liste des commentaires',
         'Send' => 'Sendai',
-    ),
-);
+    ],
+];

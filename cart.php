@@ -11,42 +11,39 @@ if (isset($_POST['id'])) {
 }
 
 //prepare sql statement for query and fetch data for the cart
-if (!empty($_SESSION['cart'])) {
-    $strInsert = implode(',', array_fill(0, count($_SESSION['cart']), '?'));
-    $sql = 'SELECT * FROM products WHERE id IN (' . $strInsert . ');';
 
-    $result = $connection->prepare($sql);
+$strInsert = implode(',', array_fill(0, count($_SESSION['cart']), '?'));
+$sql = 'SELECT * FROM products WHERE id IN (' . $strInsert . ');';
 
-    $result->execute(array_values($_SESSION['cart']));
-} else {
-    $sql = 'SELECT * FROM products WHERE id=-1;';
-    $result = $connection->query($sql);
-}
-$res = $result->fetchAll();
+$result = $connection->prepare($sql);
+
+$result->execute(array_values($_SESSION['cart']));
+
+$resultFetchAll = $result->fetchAll();
 
 if (isset($_POST['checkout'])) {
 
-    $nameClient = $_POST['name'];
-    $nameClient = strip_tags($nameClient);
-    $addressClient = $_POST['contacts'];
-    $addressClient = strip_tags($addressClient);
-    $commentClient = $_POST['comments'];
-    $commentClient = strip_tags($commentClient);
 
-    if (!empty($nameClient) && !empty($addressClient)) {
+    $arrayDetails = [
+        'name' => strip_tags($_POST['name']),
+        'contacts' => strip_tags($_POST['contacts']),
+        'comments' => strip_tags($_POST['comments']),
+    ];
+   
+    if (!empty($arrayDetails['name']) && !empty($arrayDetails['contacts'])) {
         
         $header = "From: <demo@stefan.me>\r\n";
         $header .= "MIME-VERSION: 1.0\r\n";
         $header .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
-        $subject = 'Order for ' . $nameClient;
-        $output = 'The command for:' . $nameClient . ' ,' . ' and the address is: ' . $addressClient;
+        $subject = 'Order for ' . $arrayDetails['name'];
+        $output = 'The command for:' . $arrayDetails['name'] . ' ,' . ' and the address is: ' . $arrayDetails['contacts'];
 
         ob_start();
         include 'model.php';
         $output .= ob_get_clean();
 
-        $output .= "<b>Comments:</b>\n" . $commentClient;
+        $output .= "<b>Comments:</b>\n" . $arrayDetails['comments'];
        
         mail(MANAGER_EMAIL, $subject, $output, $header);
 
@@ -81,7 +78,7 @@ if (isset($_POST['checkout'])) {
 <body>
     <div class="main-section">
         <form action="cart.php" method="post">
-            <?php foreach ($res as $product): ?>
+            <?php foreach ($resultFetchAll as $product): ?>
                 <div class="full-section">
                     <div class="info-section">
                         <img src="<?= $product['image']; ?> " alt="<?= translateLabels('image'); ?>">
