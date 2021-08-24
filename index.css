@@ -91,3 +91,10 @@ form a,form button{
     left: 50px;
     margin-left: 30px;
 }
+.error{
+    position: relative;
+    color:red;
+    font-size: 16px;
+    top: -10px;
+    left: 20px;
+}

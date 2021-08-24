@@ -11,55 +11,78 @@ if (isset($_POST['id'])) {
 }
 
 //prepare sql statement for query and fetch data for the cart
+$countCart = 0;
+if (!empty($_SESSION['cart'])) {
+    $countCart = count($_SESSION['cart']);
+}
 
-$strInsert = implode(',', array_fill(0, count($_SESSION['cart']), '?'));
+$strInsert = implode(',', array_fill(0, $countCart, '?'));
 $sql = 'SELECT * FROM products WHERE id IN (' . $strInsert . ');';
-
 $result = $connection->prepare($sql);
 
-$result->execute(array_values($_SESSION['cart']));
+if (!empty($strInsert)) {
+    $result->execute(array_values($_SESSION['cart']));
+}
 
 $resultFetchAll = $result->fetchAll();
 
+$arrayFormDetails = [
+    'name' => '',
+    'contacts' => '',
+    'comments' => '',
+];
+$arrayFormError = [
+    'name_error' => '',
+    'contacts_error' => '',
+    'comments_error' => '',
+];
 if (isset($_POST['checkout'])) {
 
+    //server-side validation
+    if (empty($_POST['name'])) {
+        $arrayFormError['name_error'] = 'Name is required.';
+    } else {
+        $arrayFormDetails['name'] = strip_tags($_POST['name']);
+    }
 
-    $arrayDetails = [
-        'name' => strip_tags($_POST['name']),
-        'contacts' => strip_tags($_POST['contacts']),
-        'comments' => strip_tags($_POST['comments']),
-    ];
-   
-    if (!empty($arrayDetails['name']) && !empty($arrayDetails['contacts'])) {
-        
+    if (empty($_POST['contacts'])) {
+        $arrayFormError['contacts_error'] = 'Contacts is required.';
+    } else {
+        $arrayFormDetails['contacts'] = strip_tags($_POST['contacts']);
+    }
+
+    if (empty($_POST['comments'])) {
+        $arrayFormError['comments_error'] = 'Comments is required.';
+    } else {
+        $arrayFormDetails['comments'] = strip_tags($_POST['comments']);
+    }
+
+    if (!empty($arrayFormDetails['name']) && !empty($arrayFormDetails['contacts'])) {
         $header = "From: <demo@stefan.me>\r\n";
         $header .= "MIME-VERSION: 1.0\r\n";
         $header .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 
-        $subject = 'Order for ' . $arrayDetails['name'];
-        $output = 'The command for:' . $arrayDetails['name'] . ' ,' . ' and the address is: ' . $arrayDetails['contacts'];
+        $subject = 'Order' . $arrayFormDetails['name'];
 
         ob_start();
-        include 'model.php';
-        $output .= ob_get_clean();
+        include 'mail_template.php';
+        $mailTemplate = ob_get_clean();
 
-        $output .= "<b>Comments:</b>\n" . $arrayDetails['comments'];
-       
-        mail(MANAGER_EMAIL, $subject, $output, $header);
+        mail(MANAGER_EMAIL, $subject, $mailTemplate, $header);
 
-        $objDateTime = new DateTime();
-        $dateISO = $objDateTime->format('c');
-        $arrProductsId = array_column($res, 'id');
+        $dateTime = new DateTime();
+        $dateISO = $dateTime->format('c');
+        $allProductsId = array_column($resultFetchAll, 'id');
 
-        $sqlOrder = 'INSERT INTO `orders`(`customer_name`, `adress`, `comment`, `creation_date`) VALUES (?, ?, ?, ?);';
+        $sqlOrder = 'INSERT INTO `orders`(`customer_name`, `customer_address`, `customer_comment`, `creation_date`) VALUES (?, ?, ?, ?);';
         $resultOrder = $connection->prepare($sqlOrder);
-        $resultOrder->execute([$nameClient, $addressClient, $commentClient, $dateISO]);
+        $resultOrder->execute([$arrayFormDetails['name'], $arrayFormDetails['contacts'], $arrayFormDetails['comments'], $dateISO]);
 
-        $lastOrderId = (int) $connection->lastInsertId();
-        $sqlOrderItem = 'INSERT INTO `orderitem`(`order_id`, `id`) VALUES (?, ?);';
-        $resultOrderItem = $connection->prepare($sqlOrderItem);
-        foreach ($arrProductsId as $order) {
-            $resultOrderItem->execute([$lastOrderId, $order]);
+        $lastOrderInsertId = (int) $connection->lastInsertId();
+        $sqlOrderProducts = 'INSERT INTO `order_product`(`order_id`, `product_id`) VALUES (?, ?);';
+        $resultOrderProducts = $connection->prepare($sqlOrderProducts);
+        foreach ($allProductsId as $productId) {
+            $resultOrderProducts->execute([$lastOrderInsertId, $productId]);
         }
         header('Location: cart.php');
         exit;
@@ -97,9 +120,12 @@ if (isset($_POST['checkout'])) {
             <?php endforeach; ?>
         </form>
         <form action="cart.php" method="post">
-            <input type="text" name="name" placeholder="<?= translateLabels('Name'); ?>" value="<?= isset($_POST['name']) ? $_POST['name'] : ''; ?>" require><br>
-            <textarea name="contacts" style="resize: none;"  cols="30" rows="2" placeholder="<?= translateLabels('Contact details'); ?>" require><?= isset($_POST['contacts']) ? $_POST['contacts'] : ''; ?></textarea><br>
-            <textarea name="comments" style="resize: none;" cols="30" rows="4" placeholder="<?= translateLabels('Comments'); ?>" ><?= isset($_POST['comments']) ? $_POST['comments'] : ''; ?></textarea><br>
+            <input type="text" name="name" placeholder="<?= translateLabels('Name'); ?>" value="<?= $arrayFormDetails['name']; ?>">
+            <span class="error"><?= $arrayFormError['name_error']; ?></span>
+            <textarea name="contacts" style="resize: none;"  cols="30" rows="2" placeholder="<?= translateLabels('Contact details'); ?>"><?= $arrayFormDetails['contacts']; ?></textarea>
+            <span class="error"><?= $arrayFormError['contacts_error']; ?></span>
+            <textarea name="comments" style="resize: none;" cols="30" rows="4" placeholder="<?= translateLabels('Comments'); ?>" ><?= $arrayFormDetails['comments']; ?></textarea>
+            <span class="error"><?= $arrayFormError['comments_error']; ?></span>
             <a href="index.php"><?= translateLabels('Go to Index'); ?></a>
             <button type="submit" name="checkout"><?= translateLabels('Checkout'); ?></button>
         </form>

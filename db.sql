@@ -19,18 +19,19 @@ INSERT INTO `products`(`title`, `description`, `price`, `image`) VALUES ("Flower
 INSERT INTO `products`(`title`, `description`, `price`, `image`) VALUES ("Flower 3","Purple","102.22","https://cdn.toxel.ro/img/contents/flowers_56.jpg");
       
 CREATE TABLE orders(
-    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     customer_name VARCHAR(100),
-    adress VARCHAR(100),
-    comment VARCHAR(200),
-    creation_date varchar(100),
+    customer_address VARCHAR(100),
+    customer_comment VARCHAR(200),
+    creation_date varchar(100)
 );
-CREATE TABLE orderItem(
+CREATE TABLE order_product(
     order_id INT,
-    id INT,
-    FOREIGN KEY (id) REFERENCES products(id) ON DELETE SET NULL,
-    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+    product_id INT,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id)
 );
+
 SELECT orderItem.order_id,orders.creation_date, orders.customer_name, orders.adress, orders.comment, SUM(products.price) as sum_order
 FROM ((orderItem 
 INNER JOIN orders ON orderItem.order_id = orders.order_id)
