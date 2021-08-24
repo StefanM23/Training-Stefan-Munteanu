@@ -21,3 +21,10 @@
     margin: 10px;
     left:200px;
 }
+.error{
+    position: relative;
+    color:red;
+    font-size: 16px;
+    top: -10px;
+    left: 20px;
+}

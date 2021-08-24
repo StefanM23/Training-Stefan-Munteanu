@@ -16,6 +16,7 @@ $arrayFormError = [
     'password_error' => '',
 ];
 
+
 if (isset($_POST['submit'])) {
 
     //server-side validation

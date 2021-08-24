@@ -2,10 +2,16 @@
 
 require_once 'common.php';
 
-$sql = 'SELECT orderItem.order_id,orders.creation_date, orders.customer_name, orders.adress, orders.comment, SUM(products.price) as sum_order
-        FROM ((orderItem
-        INNER JOIN orders ON orderItem.order_id = orders.order_id)
-        INNER JOIN products ON orderItem.id = products.id) GROUP BY orderItem.order_id;';
+$sql = 'SELECT order_product.order_id,
+               orders.creation_date, 
+               orders.customer_name, 
+               orders.customer_address, 
+               orders.customer_comment ,
+               SUM(order_product.price) as sum_prices
+        FROM (orders
+        INNER JOIN order_product ON order_product.order_id = orders.id) 
+        GROUP BY order_product.order_id;';
+       
 $result = $connection->query($sql);
 $res = $result->fetchAll();
 
@@ -26,9 +32,9 @@ $res = $result->fetchAll();
                 <div class="checkout-i">
                     <div><?= translateLabels('Date'); ?>: <?= $orderInfo['creation_date']; ?></div>
                     <div><?= translateLabels('Customer'); ?>: <?= $orderInfo['customer_name']; ?></div>
-                    <div><?= translateLabels('Adress'); ?>: <?= $orderInfo['adress']; ?></div>
-                    <div><?= translateLabels('Comments'); ?>: <?= $orderInfo['comment']; ?></div>
-                    <div><?= translateLabels('Total order'); ?>: <?= $orderInfo['sum_order']; ?></div>
+                    <div><?= translateLabels('Adress'); ?>: <?= $orderInfo['customer_address']; ?></div>
+                    <div><?= translateLabels('Comments'); ?>: <?= $orderInfo['customer_comment']; ?></div>
+                    <div><?= translateLabels('Total order'); ?>: <?= $orderInfo['sum_prices']; ?></div>
                 </div>
                 <div class="checkout-j"><a href="order.php?id=<?= $orderInfo['order_id']; ?>"><?= translateLabels('View'); ?></a></div>
             </li>

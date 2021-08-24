@@ -69,20 +69,20 @@ if (isset($_POST['checkout'])) {
         $mailTemplate = ob_get_clean();
 
         mail(MANAGER_EMAIL, $subject, $mailTemplate, $header);
-
+    
         $dateTime = new DateTime();
         $dateISO = $dateTime->format('c');
-        $allProductsId = array_column($resultFetchAll, 'id');
-
+    
         $sqlOrder = 'INSERT INTO `orders`(`customer_name`, `customer_address`, `customer_comment`, `creation_date`) VALUES (?, ?, ?, ?);';
         $resultOrder = $connection->prepare($sqlOrder);
         $resultOrder->execute([$arrayFormDetails['name'], $arrayFormDetails['contacts'], $arrayFormDetails['comments'], $dateISO]);
 
         $lastOrderInsertId = (int) $connection->lastInsertId();
-        $sqlOrderProducts = 'INSERT INTO `order_product`(`order_id`, `product_id`) VALUES (?, ?);';
+        $sqlOrderProducts = 'INSERT INTO `order_product`(`order_id`, `product_id`, `price`) VALUES (?, ?, ?);';
         $resultOrderProducts = $connection->prepare($sqlOrderProducts);
-        foreach ($allProductsId as $productId) {
-            $resultOrderProducts->execute([$lastOrderInsertId, $productId]);
+
+        foreach ($resultFetchAll as $product) {
+            $resultOrderProducts->execute([$lastOrderInsertId, $product['id'], $product['price']]);
         }
         header('Location: cart.php');
         exit;

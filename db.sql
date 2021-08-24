@@ -28,14 +28,15 @@ CREATE TABLE orders(
 CREATE TABLE order_product(
     order_id INT,
     product_id INT,
+    price DOUBLE(5, 2) NOT NULL,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL,
     FOREIGN KEY (order_id) REFERENCES orders(id)
 );
 
-SELECT orderItem.order_id,orders.creation_date, orders.customer_name, orders.adress, orders.comment, SUM(products.price) as sum_order
-FROM ((orderItem 
-INNER JOIN orders ON orderItem.order_id = orders.order_id)
-INNER JOIN products ON orderItem.id = products.id) GROUP BY orderItem.order_id;
+SELECT order_product.order_id,orders.creation_date, orders.customer_name, orders.customer_address, orders.customer_comment ,SUM(order_product.price) as sum_price
+FROM (orders
+INNER JOIN order_product ON order_product.order_id = orders.id) 
+GROUP BY order_product.order_id;
 
 SELECT orderItem.order_id,orders.creation_date, orders.customer_name, orders.adress, orders.comment, products.price, products.title, products.description, products.image
 FROM ((orderItem

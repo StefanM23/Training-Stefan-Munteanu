@@ -2,12 +2,7 @@
 
 require_once 'common.php';
 
-//if logout is push
-if (isset($_POST['logout'])) {
-    $_SESSION['username'] = null;
-}
-//the consequences of pressing the button logout redirect to login
-if (is_null($_SESSION['username'])) {
+if (!isset($_SESSION['username'])) {
     header('Location: login.php');
     exit;
 }
@@ -20,35 +15,10 @@ if (isset($_POST['id'])) {
     exit;
 }
 
-//when edit an element
-if (isset($_POST['edit'])) {
-    $sqlEdit = 'SELECT * FROM products WHERE id = ?';
-    $resultEdit = $connection->prepare($sqlEdit);
-    $resultEdit->execute([$_POST['edit']]);
-    $fetchEdit = $resultEdit->fetchAll();
-    
-    $_SESSION['titleMod'] = $fetchEdit[0]['title'];
-    $_SESSION['descriptionMod'] = $fetchEdit[0]['description'];
-    $_SESSION['priceMod'] = $fetchEdit[0]['price'];
-    $_SESSION['imageMod'] = $fetchEdit[0]['image'];
-    $_SESSION['idMod'] = $fetchEdit[0]['id'];
-    header('Location: product.php');
-    exit;
-}
-
-if (isset($_POST['add'])) {
-    unset($_SESSION['titleMod']);
-    unset($_SESSION['descriptionMod']);
-    unset($_SESSION['priceMod']);
-    unset($_SESSION['imageMod']);
-    unset($_SESSION['idMod']);
-    header('Location: product.php');
-    exit;
-}
-
 $sql = "SELECT * FROM products;";
 $result = $connection->query($sql);
-$res = $result->fetchAll();
+$resultFetchAll = $result->fetchAll();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,7 +32,7 @@ $res = $result->fetchAll();
 <body>
     <div class="main-section">
         <form action="products.php" method="post">
-            <?php foreach($res as $product): ?>
+            <?php foreach($resultFetchAll as $product): ?>
                 <div class="full-section-products" >
                     <div class="info-section">
                         <img src="<?= $product['image']; ?>" alt="<?= translateLabels('image'); ?>">
@@ -75,7 +45,7 @@ $res = $result->fetchAll();
                         </ul>
                     </div>
                     <div class="info-section">
-                        <button type="submit" name="edit" value="<?= $product['id']; ?>"><?= translateLabels('Edit'); ?></button>
+                        <a href="product.php?editId=<?= $product['id']; ?>" name="edit"><?= translateLabels('Edit'); ?></a>
                     </div>
                     <div class="info-section">
                         <button type="submit" name="id" value="<?= $product['id']; ?>"><?= translateLabels('Delete'); ?></button>
@@ -83,15 +53,15 @@ $res = $result->fetchAll();
                 </div>
             <?php endforeach; ?>
         </form>
-        <form action="products.php" method="post">
+        <form action="logout.php" method="post">
             <div class="cart-section-products">
-                <button type="submit" name="add"><?= translateLabels('Add'); ?></button>
+                <a href="product.php" name="add"><?= translateLabels('Add'); ?></a>
             </div>
             <div class="cart-section-products">
                 <button type="submit" name="logout"><?= translateLabels('Logout'); ?></button>
             </div>
         </form>
     </div><br>
-    <a class="comments" href="comment.php">Comments</a>
+    <a class="comments" href="comment.php"<?= translateLabels('Comments'); ?>></a>
 </body>
 </html>
