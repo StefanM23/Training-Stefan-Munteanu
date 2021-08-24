@@ -5,10 +5,9 @@ require_once 'common.php';
 //if logout is push
 if (isset($_POST['logout'])) {
     $_SESSION['username'] = null;
-    $_SESSION['password'] = null;
 }
 //the consequences of pressing the button logout redirect to login
-if (is_null($_SESSION['username']) && is_null($_SESSION['password'])) {
+if (is_null($_SESSION['username'])) {
     header('Location: login.php');
     exit;
 }
