@@ -8,11 +8,11 @@ CREATE TABLE IF NOT EXISTS products(
     image VARCHAR(55) NOT NULL
 );
 CREATE TABLE IF NOT EXISTS comments(
-    id_commnet INT(6) AUTO_INCREMENT PRIMARY KEY,
-    id INT,
+    id INT(6) AUTO_INCREMENT PRIMARY KEY,
+    product_id INT,
     comment VARCHAR(500),
-    completed BOOLEAN,
-    FOREIGN KEY (id) REFERENCES products(id) ON DELETE SET NULL
+    accepted BOOLEAN,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL
 );
 INSERT INTO `products`(`title`, `description`, `price`, `image`) VALUES ("Flower 1","Blue","132.22","https://cdn.toxel.ro/img/contents/flowers_56.jpg");
 INSERT INTO `products`(`title`, `description`, `price`, `image`) VALUES ("Flower 2","Red","132.12","https://cdn.toxel.ro/img/contents/flowers_56.jpg");

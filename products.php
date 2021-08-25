@@ -6,7 +6,7 @@ if (!isset($_SESSION['username'])) {
     header('Location: login.php');
     exit;
 }
-//when delete an element
+//when delete an product
 if (isset($_POST['id'])) {
     $sqlDelete = 'DELETE FROM products WHERE id = ?';
     $resultDelete = $connection->prepare($sqlDelete);
@@ -62,6 +62,6 @@ $resultFetchAll = $result->fetchAll();
             </div>
         </form>
     </div><br>
-    <a class="comments" href="comment.php"<?= translateLabels('Comments'); ?>></a>
+    <a class="comments" href="comments.php"><?= translateLabels('Comments'); ?></a>
 </body>
 </html>

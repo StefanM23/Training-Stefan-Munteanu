@@ -13,7 +13,7 @@ $sql = 'SELECT order_product.order_id,
         GROUP BY order_product.order_id;';
        
 $result = $connection->query($sql);
-$res = $result->fetchAll();
+$resultFetchAll = $result->fetchAll();
 
 ?>
 <!DOCTYPE html>
@@ -27,7 +27,7 @@ $res = $result->fetchAll();
 </head>
 <body>
     <ul>
-        <?php foreach ($res as $orderInfo): ?>
+        <?php foreach ($resultFetchAll as $orderInfo): ?>
             <li class="checkout-box">
                 <div class="checkout-i">
                     <div><?= translateLabels('Date'); ?>: <?= $orderInfo['creation_date']; ?></div>

@@ -52,7 +52,7 @@ $res = $result->fetchAll();
                             <button type="submit" name="id" value="<?= $product['id']; ?>"><?= translateLabels('Add'); ?></button>
                         </div>
                         <div class="info-section">
-                            <a href="element.php?id=<?= $product['id']; ?>"><?= translateLabels('View'); ?></a>
+                            <a href="product_detail.php?id=<?= $product['id']; ?>"><?= translateLabels('View'); ?></a>
                         </div>
                     </div>
             <?php endforeach; ?>

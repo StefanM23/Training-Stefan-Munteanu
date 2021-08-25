@@ -3,14 +3,41 @@
 require_once 'common.php';
 
 if (isset($_GET['id'])) {
-    $sql = 'SELECT orderItem.order_id,orders.creation_date, orders.customer_name, orders.adress, orders.comment, products.price, products.title, products.description, products.image
-            FROM ((orderItem
-            INNER JOIN orders ON orderItem.order_id = orders.order_id)
-            INNER JOIN products ON orderItem.id = products.id) WHERE orderItem.order_id = ?;';
 
-    $previewProduct = $connection->prepare($sql);
-    $previewProduct->execute([$_GET['id']]);
-    $res = $previewProduct->fetchAll();
+    //query for details retrieval
+    $sqlOrderDetails = 'SELECT order_product.order_id,
+                               orders.creation_date,
+                               orders.customer_name,
+                               orders.customer_address,
+                               orders.customer_comment
+                        FROM (order_product
+                        INNER JOIN orders ON order_product.order_id = orders.id)
+                        GROUP BY order_product.order_id
+                        HAVING order_product.order_id = ?;';
+
+    $previewOrderDetails = $connection->prepare($sqlOrderDetails);
+    $previewOrderDetails->execute([$_GET['id']]);
+
+    $resultOrderDetails = $previewOrderDetails->fetch(PDO::FETCH_ORI_FIRST);
+    
+    //if result is false than will redirect to the orders.php
+    if (!$resultOrderDetails) {
+        header('Location: orders.php');
+        exit;
+    }
+    //query for products order retrieval
+    $sqlOrderProducts = 'SELECT order_product.order_id,
+                                 order_product.price,
+                                 products.title,
+                                 products.description,
+                                 products.image
+                            FROM (order_product
+                            INNER JOIN products ON order_product.product_id = products.id)
+                            WHERE order_product.order_id = ?;';
+
+    $previewOrderProducts = $connection->prepare($sqlOrderProducts);
+    $previewOrderProducts->execute([$_GET['id']]);
+    $resultOrderProducts = $previewOrderProducts->fetchAll();
 }
 ?>
 <!DOCTYPE html>
@@ -24,23 +51,23 @@ if (isset($_GET['id'])) {
 </head>
 <body>
     <center>
-        <h1><?= translateLabels('Order'); ?> #<?= $res[0]['order_id']; ?></h1>
+        <h1><?= translateLabels('Order'); ?> #<?= $resultOrderDetails['order_id']; ?></h1>
     </center>
     <div class="full-section">
         <div class="section-i">
             <ul>
                 <li class="checkout-box">
                     <div class="checkout-i">
-                        <div><?= translateLabels('Date'); ?>: <?= $res[0]['creation_date']; ?></div>
-                        <div><?= translateLabels('Customer'); ?>: <?= $res[0]['customer_name']; ?></div>
-                        <div><?= translateLabels('Adress'); ?>: <?= $res[0]['adress']; ?></div>
-                        <div><?= translateLabels('Commnets'); ?>: <?= $res[0]['comment']; ?></div>
+                        <div><?= translateLabels('Date'); ?>: <?= $resultOrderDetails['creation_date']; ?></div>
+                        <div><?= translateLabels('Customer'); ?>: <?= $resultOrderDetails['customer_name']; ?></div>
+                        <div><?= translateLabels('Adress'); ?>: <?= $resultOrderDetails['customer_address']; ?></div>
+                        <div><?= translateLabels('Commnets'); ?>: <?= $resultOrderDetails['customer_comment']; ?></div>
                     </div>
                 </li>
             </ul>
         </div>
         <div class="section-i">
-            <?php foreach ($res as $previewInfo): ?>
+            <?php foreach ($resultOrderProducts as $previewInfo): ?>
                 <div class="section-i-info">
                     <div class="info-section">
                         <img src="<?= $previewInfo['image']; ?>" alt="<?= translateLabels('image'); ?>">
