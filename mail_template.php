@@ -9,7 +9,7 @@
 <body>
     <p>The command for: <?= $arrayFormDetails['name']; ?> ,and the address is: <?= $arrayFormDetails['contacts']; ?></p>
     <table border="1px" width="230px" height="120px">
-        <?php foreach ($resultFetchAll as $product): ?>
+        <?php foreach ($fetchProducts as $product): ?>
             <tr>
                 <td><img src="http://localhost/ProjectMS/<?= $product['image']; ?>" width="100%" height="100%" alt="image"></td>
                 <td>

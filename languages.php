@@ -40,5 +40,8 @@ $translations = [
         'You can leave a comment about the product' => 'Vous pouvez laisser un commentaire sur le produit',
         'List of comments' => 'Liste des commentaires',
         'Send' => 'Sendai',
+        'Name is required.' => 'Le nom est requis.',
+        'Contacts is required.' => 'Les coordonnées sont obligatoires.',
+        'Comments is required.' => 'Comments is required.',
     ],
 ];

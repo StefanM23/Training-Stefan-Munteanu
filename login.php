@@ -11,11 +11,6 @@ $arrayFormDetails = [
     'username' => '',
     'password' => '',
 ];
-$arrayFormError = [
-    'username_error' => '',
-    'password_error' => '',
-];
-
 
 if (isset($_POST['submit'])) {
 
@@ -24,7 +19,7 @@ if (isset($_POST['submit'])) {
         $arrayFormError['username_error'] = 'Username is required.';
     } else {
 
-        if ($arrayFormDetails['username'] != LOGIN_USERNAME) {
+        if ($_POST['username'] != LOGIN_USERNAME) {
             $arrayFormError['username_error'] = 'Username is wrong.';
         }
 
@@ -35,7 +30,7 @@ if (isset($_POST['submit'])) {
         $arrayFormError['password_error'] = 'Password is required.';
     } else {
 
-        if ($arrayFormDetails['password'] != LOGIN_USERNAME) {
+        if ($_POST['password'] != LOGIN_PASSWORD) {
             $arrayFormError['password_error'] = 'Password is wrong.';
         }
 
@@ -62,9 +57,13 @@ if (isset($_POST['submit'])) {
     <div class="main-login-page">
         <form action="login.php" method="post" class="myLoginPage">
             <input type="text" name="username" placeholder="<?= translateLabels('Username'); ?>" value="<?= $arrayFormDetails['username']; ?>" ><br>
-            <span class="error"><?= $arrayFormError['username_error']; ?></span>
-            <input type="password" name="password" placeholder="<?= translateLabels('Password'); ?>" value="<?= $arrayFormDetails['password']; ?>"><br>
-            <span class="error"><?= $arrayFormError['password_error']; ?></span>
+            <?php if (isset($arrayFormError['username_error']) && !empty($arrayFormError['username_error'])): ?>
+                <span class="error"><?= $arrayFormError['username_error']; ?></span>
+            <?php endif; ?>
+            <input type="password" name="password" placeholder="<?=translateLabels('Password');?>" value="<?= $arrayFormDetails['password']; ?>"><br>
+            <?php if (isset($arrayFormError['password_error']) && !empty($arrayFormError['password_error'])): ?>
+                <span class="error"><?=$arrayFormError['password_error']; ?></span>
+            <?php endif; ?>
             <button type="submit" name="submit"><?= translateLabels('Login'); ?></button>
         </form>
     </div>
