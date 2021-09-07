@@ -16,22 +16,22 @@ if (isset($_POST['submit'])) {
 
     //server-side validation
     if (empty($_POST['username'])) {
-        $arrayFormError['username_error'] = 'Username is required.';
+        $arrayFormError['username_error'] = translateLabels('Username is required.');
     } else {
 
         if ($_POST['username'] != LOGIN_USERNAME) {
-            $arrayFormError['username_error'] = 'Username is wrong.';
+            $arrayFormError['username_error'] = translateLabels('Username is wrong.');
         }
 
         $arrayFormDetails['username'] = strip_tags($_POST['username']);
     }
 
     if (empty($_POST['password'])) {
-        $arrayFormError['password_error'] = 'Password is required.';
+        $arrayFormError['password_error'] = translateLabels('Password is required.');
     } else {
 
         if ($_POST['password'] != LOGIN_PASSWORD) {
-            $arrayFormError['password_error'] = 'Password is wrong.';
+            $arrayFormError['password_error'] = translateLabels('Password is wrong.');
         }
 
         $arrayFormDetails['password'] = strip_tags($_POST['password']);

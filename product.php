@@ -14,12 +14,6 @@ $arrayFormDetails = [
     'image' => '',
 ];
 
-$arrayFormError = [
-    'title_error' => '',
-    'description_error' => '',
-    'price_error' => '',
-    'image_error' => '',
-];
 
 if (isset($_GET['editId'])) {
     $sqlEdit = 'SELECT * FROM products WHERE id = ?';
@@ -43,32 +37,30 @@ if (isset($_GET['editId'])) {
 if (isset($_POST['submit'])) {
     //server-side validation
     if (empty($_POST['title'])) {
-        $arrayFormError['title_error'] = 'Title is required.';
+        $arrayFormError['title_error'] = translateLabels('Title is required.');
     } else {
         $arrayFormDetails['title'] = strip_tags($_POST['title']);
     }
 
     if (empty($_POST['description'])) {
-        $arrayFormError['description_error'] = 'Description is required.';
+        $arrayFormError['description_error'] = translateLabels('Description is required.');
     } else {
         $arrayFormDetails['description'] = strip_tags($_POST['description']);
     }
 
     if (empty($_POST['price'])) {
-        $arrayFormError['price_error'] = 'Price is required.';
+        $arrayFormError['price_error'] = translateLabels('Price is required.');
     } else {
         $arrayFormDetails['price'] = strip_tags($_POST['price']);
     }
 
     if (empty($_POST['image'])) {
-        $arrayFormError['image_error'] = 'Image is required.';
+        $arrayFormError['image_error'] = translateLabels('Image is required.');
     } else {
         $arrayFormDetails['image'] = strip_tags($_POST['image']);
     }
 
-    if (strlen($arrayFormError['title_error']) == 0 &&
-        strlen($arrayFormError['description_error']) == 0 &&
-        strlen($arrayFormError['price_error']) == 0) {
+    if (sizeof($arrayFormError) == 0) {
 
         if (strlen($_FILES['file']['name'])) {
             $fileName = $_FILES['file']['name'];
@@ -118,13 +110,24 @@ if (isset($_POST['submit'])) {
 <body>
     <form action="product.php" method="post" enctype="multipart/form-data" class="myProductFrom">
         <input class="item-i" type="text" name="title" value="<?= $arrayFormDetails['title']; ?>" placeholder="<?= translateLabels('Title'); ?>"><br>
-        <span class="error"><?= $arrayFormError['title_error']; ?></span>
+        <?php if (isset($arrayFormError['title_error']) && !empty($arrayFormError['title_error'])): ?>
+            <span class="error"><?= $arrayFormError['title_error']; ?></span>
+        <?php endif; ?>
+        
         <input class="item-i" type="text" name="description" value="<?= $arrayFormDetails['description']; ?>" placeholder="<?= translateLabels('Description'); ?>"><br>
-        <span class="error"><?= $arrayFormError['description_error']; ?></span>
+        <?php if (isset($arrayFormError['description_error']) && !empty($arrayFormError['description_error'])): ?>
+            <span class="error"><?= $arrayFormError['description_error']; ?></span>
+        <?php endif; ?>
+        
         <input class="item-i" type="text" name="price" value="<?= $arrayFormDetails['price']; ?>" placeholder="<?= translateLabels('Price'); ?>"><br>
-        <span class="error"><?= $arrayFormError['price_error']; ?></span>
+        <?php if (isset($arrayFormError['price_error']) && !empty($arrayFormError['price_error'])): ?>
+            <span class="error"><?= $arrayFormError['price_error']; ?></span>
+        <?php endif; ?>
+
         <input class="item-j" type="text" name="image" value="<?= $arrayFormDetails['image']; ?>"  placeholder="<?= translateLabels('Image'); ?>">
-        <span class="error"><?= $arrayFormError['image_error']; ?></span>
+        <?php if (isset($arrayFormError['image_error']) && !empty($arrayFormError['image_error'])): ?>
+            <span class="error"><?= $arrayFormError['image_error']; ?></span>
+        <?php endif; ?>
         <input class="item-j-x" type="file" name="file"><br>
         <a class="item-j-y" href="products.php"><?= translateLabels('Products'); ?></a>
         <?php if (isset($_GET['editId'])): ?>

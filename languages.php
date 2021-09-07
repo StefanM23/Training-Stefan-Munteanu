@@ -43,5 +43,13 @@ $translations = [
         'Name is required.' => 'Le nom est requis.',
         'Contacts is required.' => 'Les coordonnées sont obligatoires.',
         'Comments is required.' => 'Comments is required.',
+        'Username is required.' => 'Nom utilisateur est nécessaire.',
+        'Username is wrong.' => 'Le nom utilisateur est erroné.',
+        'Password is required.' => 'Mot de passe requis.',
+        'Password is wrong.' => 'Le mot de passe est erroné.',
+        'Title is required.' => 'Le titre est requis.',
+        'Description is required.' => 'La description est requise.',
+        'Price is required.' => 'Le prix est requis.',
+        'Image is required.' => 'L image est requise.',
     ],
 ];
